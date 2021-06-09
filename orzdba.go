@@ -1370,8 +1370,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 
 	//innodb_rows
 	if flag_info["innodb_rows"] == true {
-		title_summit += Colorize("--innodb rows status--- ", green, blue, "", "")
-		title_detail += Colorize("  ins   upd   del  read|", green, "", "y", "")
+		title_summit += Colorize("---innodb rows status--- ", green, blue, "", "")
+		title_detail += Colorize("   ins   upd   del  read|", green, "", "y", "")
 		if count == 0 {
 			data_detail += Colorize("0 0 0  0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
@@ -1380,7 +1380,7 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 			innodb_rows_deleted_diff := (second.Innodb_rows_deleted - first.Innodb_rows_deleted) / interval
 			innodb_rows_read_diff := (second.Innodb_rows_read - first.Innodb_rows_read) / interval
 
-			data_detail += formatStr(5,strconv.Itoa(innodb_rows_inserted_diff), "", "", "", "")
+			data_detail += formatStr(6,strconv.Itoa(innodb_rows_inserted_diff), "", "", "", "")
                         data_detail += formatStr(6,strconv.Itoa(innodb_rows_updated_diff), "", "", "", "")
                         data_detail += formatStr(6,strconv.Itoa(innodb_rows_deleted_diff), "", "", "", "")
                         data_detail += formatStr(6,changeUnits(innodb_rows_read_diff), getColor(innodb_rows_read_diff,500000,2000000), "", "", "")
@@ -1390,14 +1390,14 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 
 	//innodb_pages
 	if flag_info["innodb_pages"] == true {
-		title_summit += Colorize("---innodb bp pages status-- ", green, blue, "", "")
-		title_detail += Colorize("   data   free  dirty flush|", green, "", "y", "")
+		title_summit += Colorize("---innodb bp pages status--- ", green, blue, "", "")
+		title_detail += Colorize("    data   free  dirty flush|", green, "", "y", "")
 		if count == 0 {
 			data_detail += Colorize("  0  0  0 0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
 			flush := (second.Innodb_buffer_pool_pages_flushed - first.Innodb_buffer_pool_pages_flushed) / interval
 
-                        data_detail += formatStr(7,changeUnits(second.Innodb_buffer_pool_pages_data), "", "", "", "")
+                        data_detail += formatStr(8,changeUnits(second.Innodb_buffer_pool_pages_data), "", "", "", "")
                         data_detail += formatStr(7,changeUnits(second.Innodb_buffer_pool_pages_free), "", "", "", "")
                         data_detail += formatStr(7,changeUnits(second.Innodb_buffer_pool_pages_dirty), getColor(second.Innodb_buffer_pool_pages_dirty, 1024, 1048576) , "", "", "")
                         data_detail += formatStr(6,changeUnits(flush), getColor(flush, 1000, 3000), "", "", "")
@@ -1407,8 +1407,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 
 	//innodb_data
 	if flag_info["innodb_data"] == true {
-		title_summit += Colorize("-----innodb data status----- ", green, blue, "", "")
-		title_detail += Colorize(" reads writes   read written|", green, "", "y", "")
+		title_summit += Colorize("------innodb data status------ ", green, blue, "", "")
+		title_detail += Colorize(" reads writes    read  written|", green, "", "y", "")
 		if count == 0 {
 			data_detail += Colorize(" 0  0  0  0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
@@ -1420,8 +1420,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 			data_detail += formatStr(6, strconv.Itoa(innodb_data_reads_diff), "", "", "", "")
 			data_detail += formatStr(7, strconv.Itoa(innodb_data_writes_diff), "", "", "", "")
 
-			data_detail += formatStr(7, changeUnits(innodb_data_read_diff), "", "", "", "")
-			data_detail += formatStr(8, changeUnits(innodb_data_written_diff), "", "", "", "")
+			data_detail += formatStr(8, changeUnits(innodb_data_read_diff), "", "", "", "")
+			data_detail += formatStr(9, changeUnits(innodb_data_written_diff), "", "", "", "")
 
 			data_detail += Colorize("|", green, "", "", "")
 		}
@@ -1429,8 +1429,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 
 	//innodb_log
 	if flag_info["innodb_log"] == true {
-		title_summit += Colorize("--innodb log-- ", green, blue, "", "")
-		title_detail += Colorize("fsyncs written|", green, "", "y", "")
+		title_summit += Colorize("--innodb log--- ", green, blue, "", "")
+		title_detail += Colorize("fsyncs  written|", green, "", "y", "")
 		if count == 0 {
 			data_detail += Colorize(" 0   0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
@@ -1439,15 +1439,15 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 			innodb_os_log_written_diff := (second.Innodb_os_log_written - first.Innodb_os_log_written) / interval
 
 			data_detail += Colorize(strings.Repeat(" ", 6-len(strconv.Itoa(innodb_os_log_fsyncs_diff)))+strconv.Itoa(innodb_os_log_fsyncs_diff), "", "", "", "")
-			data_detail += formatStr(8, changeUnits(innodb_os_log_written_diff), getColor(innodb_os_log_written_diff,1023,1048576), "", "", "")
+			data_detail += formatStr(9, changeUnits(innodb_os_log_written_diff), getColor(innodb_os_log_written_diff,1023,1048576), "", "", "")
 			data_detail += Colorize("|", green, "", "", "")
 		}
 	}
 
 	//innodb_status
 	if flag_info["innodb_status"] == true {
-		title_summit += Colorize("--his--log(byte)--  read ---query--- ", green, blue, "", "")
-		title_detail += Colorize(" list uflush uckpt  view inside  que|", green, "", "y", "")
+		title_summit += Colorize("--his---log(byte)------  read ---query--- ", green, blue, "", "")
+		title_detail += Colorize(" list  uflush     uckpt  view inside  que|", green, "", "y", "")
 		if count == 0 {
 			data_detail += Colorize("0  0   0  0 0 0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
@@ -1470,10 +1470,10 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 			//History_list
 			data_detail += formatStr(5, changeUnits(second.History_list), "", "", "", "")
 			//unflushed_log
-			data_detail += formatStr(7, changeUnits(unflushed_log), yellow, "", "", "")
+			data_detail += formatStr(8, changeUnits(unflushed_log), yellow, "", "", "")
 
 			//uncheckpointed_bytes
-			data_detail += formatStr(6, changeUnits(uncheckpointed_bytes), yellow, "", "", "")
+			data_detail += formatStr(10, changeUnits(uncheckpointed_bytes), yellow, "", "", "")
 
 			//Read_views
 			data_detail += formatStr(6, strconv.Itoa(second.Read_view), "", "", "", "")
@@ -1493,11 +1493,11 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 		if count == 0 {
 			data_detail += Colorize("   0000 0", "", "", "", "") + Colorize("|", green, "", "", "")
 		} else {
-			connections_dirr := (second.Connections - first.Connections) / interval
+			connections_diff := (second.Connections - first.Connections) / interval
 
 			threads_created_diff := (second.Threads_created - first.Threads_created) / interval
 
-			thread_cache_hit := (1 - float64(threads_created_diff)/float64(connections_dirr)) * 100
+			thread_cache_hit := (1 - float64(threads_created_diff)/float64(connections_diff)) * 100
 
 			data_detail += formatStr(4, strconv.Itoa(second.Threads_running), "", "", "", "")
 
@@ -1733,24 +1733,24 @@ func main() {
 
 	//nocolor
 	if info["nocolor"] == true {
-		black = ""
-		red = ""
-		green = ""
+		black  = ""
+		red    = ""
+		green  = ""
 		yellow = ""
-		blue = ""
+		blue   = ""
 		purple = ""
 		dgreen = ""
-		white = ""
+		white  = ""
 
 	} else {
-		black = "black"
-		red = "red"
-		green = "green"
+		black  = "black"
+		red    = "red"
+		green  = "green"
 		yellow = "yellow"
-		blue = "blue"
+		blue   = "blue"
 		purple = "purple"
 		dgreen = "dgreen"
-		white = "white"
+		white  = "white"
 	}
 	//rt
 	if info["rt"] == true {
@@ -1797,6 +1797,7 @@ func main() {
 	cpu_string = strings.Replace(cpu_string, "\n", "", -1)
 	first.cpu_core, _ = strconv.ParseFloat(cpu_string, 64)
 
+	interval, _ := strconv.Atoi(info["interval"].(string))
 	if info["count"] == 0 {
 		i := 0
 		for {
@@ -1804,7 +1805,7 @@ func main() {
 			second.cpu_core, _ = strconv.ParseFloat(cpu_string, 64)
 			gotNumber(info, first, second, i)
 			first = second
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * time.Duration(interval))
 			i++
 		}
 	} else {
@@ -1813,45 +1814,9 @@ func main() {
 			second.cpu_core, _ = strconv.ParseFloat(cpu_string, 64)
 			gotNumber(info, first, second, i)
 			first = second
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * time.Duration(interval))
 		}
 		execCommand("killall tcprstat")
 		os.Exit(0)
 	}
-
-	// for i := 1; i < 100; i++ {
-	//  cmds := createCommand(info)
-	//  fmt.Println(gotNumber(info, cmds))
-	//  time.Sleep(time.Second)
-	// }
-
-	// for i := 1; i < 100; i++ {
-	//  if info["rt"] == true {
-	//  cmds := createCommand(info)
-	//  fmt.Println(cmds)
-	//  } else {
-	//  cmds := createCommand(info)
-	//  fmt.Println(cmds)
-	//  time.Sleep(time.Second)
-	//  }
-	// }
-
-	// mysql := flag.Bool("mysql", false, "Print MySQLInfo (include -t,-com,-hit,-T,-B).")
-	// innodb := flag.Bool("innodb", false, "Print InnodbInfo(include -t,-innodb_pages,-innodb_data,-innodb_log,-innodb_status)")
-	// sys := flag.Bool("sys", false, "Print SysInfo   (include -t,-l,-c,-s).")
-	// lazy := flag.Bool("lazy", false, "Print Info  (include -t,-l,-c,-s,-com,-hit).")
-
-	//这个直接string打印
-	//其余的用算法打印出来 本就是小数点
-	// ss := execCommand("echo 'scale=2;4/5'|bc")
-	// f, _ := ss.(float64)
-	// fmt.Println(f)
-
-	// if info["disk"] != "none" {
-	//  fmt.Println(info)
-	//  fmt.Println(info["disk"])
-	// } else {
-	//  fmt.Println(info)
-	//  fmt.Println(info["disk"])
-	// }
 }
