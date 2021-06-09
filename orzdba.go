@@ -1538,8 +1538,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 	//semi
 	if flag_info["semi"] == true {
 		if flag_info["ext"] == true {
-			title_summit += Colorize("-----wait_time(s)------ ---------", green, blue, "", "")
-			title_detail += Colorize("  net    tx  nets   txs   yes  no", green, "", "y", "")
+			title_summit += Colorize("------wait_time(s)----- ----------", green, blue, "", "")
+			title_detail += Colorize("  net    tx  nets   txs   yes   no", green, "", "y", "")
 			if count == 0 {
 				data_detail += Colorize("100ms 100ms 1000 1000  1000 1000", "", "", "", "")
 			} else {
@@ -1560,7 +1560,7 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 				data_detail += formatStr(6, changeUnits(semi_nets_diff), "", "", "", "")
 				data_detail += formatStr(6, changeUnits(semi_txs_diff), "", "", "", "")
 				data_detail += formatStr(6, changeUnits(semi_yestx_diff), "", "", "", "")
-				data_detail += formatStr(4, changeUnits(semi_notx_diff), "", "", "", "")
+				data_detail += formatStr(5, changeUnits(semi_notx_diff), "", "", "", "")
 			}
 		}
 		title_summit += Colorize(" --semiStatus--- ", green, blue, "", "")
@@ -1581,8 +1581,8 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 	//threads ------threads------
 	if flag_info["slave"] == true {
 		if flag_info["ext"] == true {
-			title_summit += Colorize("--MasterLogPos--", green, blue, "", "")
-			title_detail += Colorize(" Read Exec chkRE", green, "", "y", "")
+			title_summit += Colorize("---------MasterLogPos--------", green, blue, "", "")
+			title_detail += Colorize("       Read       Exec  chkRE", green, "", "y", "")
 			if count == 0 {
 				data_detail += Colorize("    0    0     0", "", "", "", "") + Colorize("|", green, "", "", "")
 	                } else {
@@ -1590,9 +1590,9 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 				if checkNum < 0 {
 					checkNum = second.var_max_binlog_size + second.Read_Master_Log_Pos - second.Exec_Master_Log_Pos
 				}
-				data_detail += formatStr(5, changeUnits(second.Read_Master_Log_Pos), "", "", "", "")
-				data_detail += formatStr(5, changeUnits(second.Exec_Master_Log_Pos), "", "", "", "")
-				data_detail += formatStr(6, changeUnits(checkNum), "", "", "", "")
+				data_detail += formatStr(11, changeUnits(second.Read_Master_Log_Pos), "", "", "", "")
+				data_detail += formatStr(11, changeUnits(second.Exec_Master_Log_Pos), "", "", "", "")
+				data_detail += formatStr(7, changeUnits(checkNum), "", "", "", "")
 			}
 		} else {
 
@@ -1723,7 +1723,7 @@ func main() {
 	go func() {
 		select {
 		case s := <-c:
-			fmt.Printf("\n\033[1;4;31m%s:罒灬罒: Buy HT to the moon !\033[0m\n", s)
+			fmt.Printf("\n\033[1;4;31m%s:罒灬罒: Buy htmoon !\033[0m\n", s)
 			execCommand("killall tcprstat")
 			//不写就退不出来了
 			os.Exit(1)
