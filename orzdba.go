@@ -1005,6 +1005,7 @@ func gotNumber(flag_info map[string]interface{}, first basic, second basic, coun
 		}
 
 		pic += Colorize(".==========================================================================================================.\n", green, "", "", "")
+		pic += Colorize("|", green, "", "", "") + "Author:" + Colorize("Li", green, "", "", "") + Colorize("Xue", red, "", "", "") + Colorize("Ping", purple, "", "", "") + Colorize("|", green, "", "", "") + "\n"
 		pic += Colorize("|", green, "", "", "") + "Author:" + Colorize("Chen", red, "", "", "") + Colorize("Xing", green, "", "", "")  + Colorize("Long", purple, "", "", "") + Colorize("|", green, "", "", "") + "\n"
 		pic += Colorize("'=========================================================================================================='\n\n", green, "", "", "")
 		pic += Colorize("HOST: ", red, "", "", "") + Colorize(strings.Replace(second.hostname, "\n", "", -1), yellow, "", "", "") + Colorize("IP: ", red, "", "", "") + Colorize(strings.Replace(second.ip, "\n", "", -1), yellow, "", "", "") + "\n"
