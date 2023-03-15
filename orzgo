@@ -1,0 +1,21 @@
+#!/bin/bash
+myid=$1
+mypara="$2 $3 $4 $5 $6 $7 $8 $9"
+orzCnf="/usr/local/bin/.orzmonitor.conf"
+if [ "${myid}" == "list" ];then
+	cat ${orzCnf} | awk '{print $1" "$2}' | column -t
+else
+	uuid=`cat /proc/sys/kernel/random/uuid | sed 's/-//g'`
+	orzCnfString=`cat ${orzCnf} | grep ${myid} | head -n 1`
+	myHost=`echo "${orzCnfString}" | awk '{print $2}'`
+	myPort=`echo "${orzCnfString}" | awk '{print $3}'`
+	myUser=`echo "${orzCnfString}" | awk '{print $4}'`
+	myPass=`echo "${orzCnfString}" | awk '{print $5}'`
+	if [ "${myHost:0:3}" == "10" ];then
+		myIp=$myHost
+	else
+		myIp=`dig $myHost | egrep -v '^;' | egrep 'IN.*A' | grep 10 | awk '{print $5}' | tail -n 1`
+	fi
+	echo "/usr/local/bin/orzdba -H ${myIp} -P ${myPort} -u ${myUser} -p ${myPass} -myid ${myid} -com -hit -T -innodb_rows -innodb_pages -t -B ${mypara}"
+	/usr/local/bin/orzdba -H ${myIp} -P ${myPort} -u ${myUser} -p ${myPass} -myid ${myid} -com -hit -T -innodb_rows -innodb_pages -t -B ${mypara}
+fi
