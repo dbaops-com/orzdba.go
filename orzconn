@@ -1,0 +1,56 @@
+#!/bin/bash
+host=$1
+exeSQL=$2
+column=$3
+orzCnf="/usr/local/bin/.orzmonitor.conf"
+if [ "$host" == "list" ];then
+    cat ${orzCnf} | awk '{print $1" "$2}' | column -t
+elif [ "$exeSQL" == "" ];then
+    orzCnfString=`cat ${orzCnf} | grep ${host} | head -n 1`
+    uuid=`cat /proc/sys/kernel/random/uuid | sed 's/-//g'`
+    myHost=`echo "${orzCnfString}" | awk '{print $2}'`
+    myPort=`echo "${orzCnfString}" | awk '{print $3}'`
+    myUser=`echo "${orzCnfString}" | awk '{print $4}'`
+    myPass=`echo "${orzCnfString}" | awk '{print $5}'`
+    myCnf="/usr/local/bin/.myConn-${uuid}.conf"
+    echo "[mysql]"         > ${myCnf}
+    echo "host=${myHost}" >> ${myCnf}
+    echo "port=${myPort}" >> ${myCnf}
+    echo "user=${myUser}" >> ${myCnf}
+    echo "password=${myPass}" >> ${myCnf}
+    echo "default-character-set=utf8mb4" >> ${myCnf}
+    echo "prompt=(${host}=\\u@\\h) [\\d]\\n\\R:\\m>\\_" >> ${myCnf}
+    find /usr/local/bin/ -name .myConn-*.conf -type f -amin +60 -exec rm {} \;
+    mysql --defaults-file=${myCnf}
+else
+    cat ${orzCnf} | egrep -v "^#" | egrep "${host}" | while read orzCnfString;
+    do
+        uuid=`cat /proc/sys/kernel/random/uuid | sed 's/-//g'`
+        myHost=`echo "${orzCnfString}" | awk '{print $2}'`
+        if [ "${myHost:0,2}" == "172" ];then
+        	ipAddr=${myHost}
+        else
+        	ipAddr=`dig +short ${myHost}`
+        fi
+        myPort=`echo "${orzCnfString}" | awk '{print $3}'`
+        myUser=`echo "${orzCnfString}" | awk '{print $4}'`
+        myPass=`echo "${orzCnfString}" | awk '{print $5}'`
+        myCnf="/usr/local/bin/.myConn-${uuid}.conf"
+        echo "[mysql]"         > ${myCnf}
+        echo "host=${myHost}" >> ${myCnf}
+        echo "port=${myPort}" >> ${myCnf}
+        echo "user=${myUser}" >> ${myCnf}
+        echo "password=${myPass}" >> ${myCnf}
+        echo "prompt=(${host}=\\u@\\h) [\\d]\\n\\R:\\m>\\_" >> ${myCnf}
+        find /usr/local/bin/ -name .myConn-*.conf -type f -amin +60 -exec rm {} \;
+        echo "#-----------------------------------------------------------------#"
+        echo "#Host: [${myHost}/${ipAddr}:${myPort}] , Query Result: "
+        echo "#-----------------------------------------------------------------#"
+	if [ "${column}" = "" ];then
+            mysql --defaults-file=${myCnf} --connect-timeout=2 -e "$exeSQL" | column -t
+	else
+            mysql --defaults-file=${myCnf} --connect-timeout=2 -e "$exeSQL"
+	fi
+        echo ""
+    done
+fi
